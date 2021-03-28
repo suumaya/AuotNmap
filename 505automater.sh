@@ -1,14 +1,15 @@
 #!/bin/sh
 
+
 # ANSI colors for Auto-nmap-Analyzer
 RED='\033[0;31m'
-YELLOW='\033[0;33m'
-GREEN='\033[0;32m'
+YELLOW='\033[0;33m' 
+CYAN='\033[36m'
+GREEN='\033[0;32m' 
 NC='\033[0m'
-CYAN '\u001b[36m'
-BLUE '\u001b[34m'
+BLUE='\033[0;34m'
 origIFS="${IFS}"
-
+REMOTE='off'
 # Start timer
 elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
 
@@ -62,8 +63,9 @@ usage() {
 header() {
         echo
         # Print scan type
-        printf "${CYAN}\tSEC-505 (Network Security) Project \n\n"
-        printf "${BLUE}\tRunning a ${TYPE} scan on ${NC}${HOST}\n\n"
+        printf "${CYAN}\t\t **** Auto-Nmap Analyzer **** \n\n"
+        printf "${CYAN}\t **** SEC-505 (Network Security) Project **** \n\n"
+        printf "${BLUE}Running a ${TYPE} scan on ${NC}${HOST}\n\n"
 }
 
 # Used Before and After each nmap scan, to keep found ports consistent across the script
@@ -294,13 +296,13 @@ footer() {
                 hours=$((elapsedSeconds / 3600))
                 minutes=$(((elapsedSeconds % 3600) / 60))
                 seconds=$(((elapsedSeconds % 3600) % 60))
-                printf "${YELLOW}Completed in ${hours} hour(s), ${minutes} minute(s) and ${seconds} second(s)\n"
+                printf "${BLUE}Completed in ${hours} hour(s), ${minutes} minute(s) and ${seconds} second(s)\n"
         elif [ ${elapsedSeconds} -gt 60 ]; then
                 minutes=$(((elapsedSeconds % 3600) / 60))
                 seconds=$(((elapsedSeconds % 3600) % 60))
-                printf "${YELLOW}Completed in ${minutes} minute(s) and ${seconds} second(s)\n"
+                printf "${BLUE}Completed in ${minutes} minute(s) and ${seconds} second(s)\n"
         else
-                printf "${YELLOW}Completed in ${elapsedSeconds} seconds\n"
+                printf "${BLUE}Completed in ${elapsedSeconds} seconds\n"
         fi
         printf "${NC}\n"
 }
