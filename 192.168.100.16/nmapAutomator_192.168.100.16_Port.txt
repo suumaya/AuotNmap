@@ -1,0 +1,16 @@
+
+	SEC-505 (Network Security) Project 
+
+	Running a Port scan on [0m192.168.100.16
+
+[0;32m---------------------Starting Port Scan-----------------------
+[0m
+[0;33mPort Scan is not implemented yet in Remote mode.
+[0m
+
+
+[0;32m---------------------Finished all scans------------------------
+[0m
+
+[0;33mCompleted in 0 seconds
+[0m

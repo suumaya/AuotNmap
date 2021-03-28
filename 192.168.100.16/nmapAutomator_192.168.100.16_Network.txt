@@ -1,0 +1,16 @@
+
+[0;32mSEC-505 (Network Security) Project 
+
+[0;33mRunning a Network scan on [0m192.168.100.16
+
+[0;32m---------------------Starting Network Scan---------------------
+[0m
+
+
+
+
+[0;32m---------------------Finished all scans------------------------
+[0m
+
+[0;33mCompleted in 2 seconds
+[0m

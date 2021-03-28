@@ -5,11 +5,12 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+CYAN '\u001b[36m'
+BLUE '\u001b[34m'
 origIFS="${IFS}"
 
 # Start timer
 elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
-REMOTE=false
 
 # Parse flags
 while [ $# -gt 0 ]; do
@@ -39,20 +40,6 @@ while [ $# -gt 0 ]; do
 done
 set -- ${POSITIONAL}
 
-# Legacy flags support, if run without -H/-t
-if [ -z "${HOST}" ]; then
-        HOST="$1"
-fi
-
-if [ -z "${TYPE}" ]; then
-        TYPE="$2"
-fi
-
-
-# Set DNS or default to system DNS
-    DNSSERVER="$(grep 'nameserver' /etc/resolv.conf | grep -v '#' | head -n 1 | awk {'print $NF'})"
-    DNSSTRING="--system-dns"
-
 # Set output dir or default to host-based dir
 if [ -z "${OUTPUTDIR}" ]; then
         OUTPUTDIR="${HOST}"
@@ -66,7 +53,6 @@ usage() {
         printf "${YELLOW}\tNetwork : ${NC}Shows all live hosts in the host's network\n"
         printf "${YELLOW}\tPort    : ${NC}Shows all open ports\n"
         printf "${YELLOW}\tVulns   : ${NC}Runs CVE scan and nmap Vulns scan on all found ports\n"
-        printf "${YELLOW}\tAll     : ${NC}Runs all the scans ${YELLOW}(~20-30 minutes)\n"
         printf "${NC}\n"
         exit 1
 }
@@ -75,13 +61,9 @@ usage() {
 
 header() {
         echo
-
         # Print scan type
-        if expr "${TYPE}" : '^\([Aa]ll\)$' >/dev/null; then
-                printf "${YELLOW}Running all scans on ${NC}${HOST}"
-        else
-                printf "${YELLOW}Running a ${TYPE} scan on ${NC}${HOST}"
-        fi
+        printf "${CYAN}\tSEC-505 (Network Security) Project \n\n"
+        printf "${BLUE}\tRunning a ${TYPE} scan on ${NC}${HOST}\n\n"
 }
 
 # Used Before and After each nmap scan, to keep found ports consistent across the script
@@ -98,14 +80,6 @@ assignPorts() {
                         allPorts="$(awk -vORS=, -F/ '/^[0-9]/{print $1}' "nmap/Port_$1.nmap" "nmap/Full_$1.nmap" | sed 's/.$//')"
                 else
                         allPorts="$(awk -vORS=, -F/ '/^[0-9]/{print $1}' "nmap/Full_$1.nmap" | sed 's/.$//')"
-                fi
-        fi
-
-        # Set $udpPorts based on UDP scan
-        if [ -f "nmap/UDP_$1.nmap" ]; then
-                udpPorts="$(awk -vORS=, -F/ '/^[0-9]/{print $1}' "nmap/UDP_$1.nmap" | sed 's/.$//')"
-                if [ "${udpPorts}" = "Al" ]; then
-                        udpPorts=""
                 fi
         fi
 }
