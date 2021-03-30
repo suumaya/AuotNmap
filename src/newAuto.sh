@@ -76,5 +76,5 @@ footer() {
 header
 portScan
 footer
-python3 analysis.py Data" On ${now}".csv
+python3 analysis.py Data" On ${now}".csv $HOST
 evince final_report.pdf
