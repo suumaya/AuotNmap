@@ -77,3 +77,4 @@ header
 portScan
 footer
 python3 analysis.py Data" On ${now}".csv
+evince final_report.pdf
