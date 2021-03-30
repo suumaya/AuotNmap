@@ -26,6 +26,6 @@ ax = fig.add_subplot(111)
 ax.plot([1,2,3])
 fig.savefig('port-test.png')
 
-plt.hist(df['PORT']);
+plt.hist(df['SERVICE']);
 
 

@@ -15,12 +15,9 @@ now=`date`
 # Start timer
 elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
 
-HOST="192.168.100.16"
+HOST="45.33.32.156"
 TYPE='PORT'
-#export output to file
-#OUTPUTDIR="${HOST}"
-#outputFile="$(echo $1 | sed -e 's/.*-oN \(.*\).nmap.*/\1/').nmap"
-#tmpOutputFile="${outputFile}.tmp"
+
 
 header() {
         echo
@@ -36,12 +33,12 @@ portScan() {
         printf "${GREEN}---------------------Starting Port Scan-----------------------\n"
         printf "${NC}\n"
     
-    if [ -e results" ${now}" ];
+    if [ -e results"-${now}" ];
     then
-    rm results" ${now}"
+    rm results"-${now}"
     fi
     
-      nmap $HOST | tail -n +5 |head -n -3 >> results" ${now}"
+      nmap $HOST | tail -n +5 |head -n -3 >> results"-${now}"
 
 
 
@@ -51,16 +48,16 @@ portScan() {
 then
       whatweb $HOST -v > temp
      fi
-done <results" ${now}"
+done <results"-${now}"
 
 if [ -e temp ];
 then
-cat temp >> results" ${now}"
+cat temp >> results"-${now}"
 rm temp
 fi
 
-cat results" ${now}" | tr -s '[:blank:]' ',' > Data" On ${now}".csv
-cat results" ${now}"
+cat results"-${now}" | tr -s '[:blank:]' ',' > Data" On ${now}".csv
+cat results"-${now}"
 
 }
 
