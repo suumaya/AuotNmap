@@ -58,6 +58,7 @@ fi
 
 cat results"-${now}" | tr -s '[:blank:]' ',' > Data" On ${now}".csv
 cat results"-${now}"
+rm results"-${now}"
 
 }
 
