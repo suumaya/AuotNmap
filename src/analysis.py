@@ -9,6 +9,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import docx
+#from docx2pdf import convert
+from fpdf import FPDF
+
 
 if len(sys.argv) != 2:
     sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
@@ -45,27 +48,39 @@ report_message4 = "Cyber security team.\nSEC 504 project\nKing Saud University\n
 
 #convert to final_report.pdf
 
-#write
-mydoc = docx.Document()
+# write in docx, kali not support ms but worked 
+#mydoc = docx.Document()
+#
+#mydoc.add_picture(logo_img)
+#mydoc.add_heading(report_message1, 0)
+#
+#mydoc.add_paragraph(report_message2)
+#mydoc.add_picture(service_img)
+#
+#mydoc.add_paragraph(report_message3)
+#mydoc.add_picture(port_img)
+#
+#mydoc.add_heading(report_message4, 1)
+#
+#mydoc.save("initial_report.docx")
 
-mydoc.add_picture(logo_img, width=docx.shared.Inches(5), height=docx.shared.Inches(7))
-mydoc.add_heading(report_message1, 0)
 
-mydoc.add_paragraph(report_message2)
-mydoc.add_picture(service_img, width=docx.shared.Inches(5), height=docx.shared.Inches(7))
+# convert
+#convert("initial_report.docx", "final_report.pdf")
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size = 15)
 
-mydoc.add_paragraph(report_message3)
-mydoc.add_picture(port_img, width=docx.shared.Inches(5), height=docx.shared.Inches(7))
+pdf.cell(200, 10, txt = report_message1,
+         ln = 1, align = 'C')
+    
+pdf.cell(200, 10, txt = report_message2,
+         ln = 2, align = 'C')
+         
+pdf.cell(200, 10, txt = report_message3,
+         ln = 3, align = 'C')
 
-mydoc.add_heading(report_message4, 1)
+pdf.cell(200, 10, txt = report_message4,
+         ln = 4, align = 'C')
 
-mydoc.save("initial_report.docx")
-
-
-# Read
-doc = docx.Document("initial_report.docx")
-all_paras = doc.paragraphs
-
-for para in all_paras:
-    print(para.text)
-    print("-------")
+pdf.output("final_report.pdf")
