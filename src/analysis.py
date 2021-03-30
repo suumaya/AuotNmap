@@ -72,23 +72,21 @@ report_message4 = "Cyber security team.\nSEC 504 project\nKing Saud University\n
 pdf = FPDF()
 pdf.add_page()
 pdf.set_font("Arial", size = 15)
-#fpdf.image(logo_img, x=50, y=100, w=sizew, h=sizeh)
 
-pdf.cell(200, 10, txt = report_message1,
-         ln = 1, align = 'C')
+pdf.cell(200, 10, txt = report_message1,ln = 1, align = 'C')
+pdf.image(logo_img, w=pdf.w/2.0, h=pdf.h/4.0)
+
+pdf.add_page()
+pdf.cell(200, 10, txt = report_message2,ln = 2, align = 'C')
 pdf.image(service_img, w=pdf.w/2.0, h=pdf.h/4.0)
 pdf.ln(0.15)
-    
-pdf.add_page()
-pdf.cell(200, 10, txt = report_message2,
-         ln = 2, align = 'C')
-         
-pdf.cell(200, 10, txt = report_message3,
-         ln = 3, align = 'C')
-#fpdf.image(port_img, x=50, y=100, w=sizew, h=sizeh)
+ 
+pdf.cell(200, 10, txt = report_message3,ln = 3, align = 'C')
+pdf.image(port_img, w=pdf.w/2.0, h=pdf.h/4.0)
+pdf.ln(0.15)
 
-pdf.cell(200, 10, txt = report_message4,
-         ln = 4, align = 'C')
+pdf.add_page()
+pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
 
 pdf.output("final_report.pdf",'F')
 
