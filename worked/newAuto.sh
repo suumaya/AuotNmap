@@ -78,4 +78,4 @@ footer() {
 header
 portScan
 footer
-python3 analysis.py
+python3 analysis.py Data" On ${now}".csv
