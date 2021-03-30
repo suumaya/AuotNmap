@@ -15,6 +15,12 @@ elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
 
 HOST="192.168.100.16"
 TYPE='PORT'
+
+#Files
+outDir="/Users/tamimisu/Desktop/NmapProject"
+csvFile="AnalyzeMe.csv"
+sourceFile ="/Users/tamimisu/Desktop/NmapProject/out.txt"
+
 #export output to file
 #OUTPUTDIR="${HOST}"
 #outputFile="$(echo $1 | sed -e 's/.*-oN \(.*\).nmap.*/\1/').nmap"
@@ -71,6 +77,23 @@ portScan() {
         echo
 }
 
+function fnGnmapToCsv {
+  # Reduce file to lines with open ports to eliminate reading unnecessary lines
+  grep '/open/' "$sourceFile" --color=never > "$outDir"/".txt"
+  # Convert to CSV
+  while read -r thisLine; do
+    # Get host address
+    thisHost=$(echo "$thisLine" | awk '{print $outDir}')
+    # Parse open port results
+    echo "$thisLine" | awk '{$1=$2=$3=$4=""; print $0}' | sed 's/\/,/\/\n/g' | sed 's/^ *//g' | grep '/open/' | awk -v awkHost="$thisHost" -F / '{print awkHost "," $3 "," $1 "," $5 "," $7}' | awk -F \( '{print $1}' | sed 's/,$//g' >> "$outDir"/"working-csv.txt"
+  done < "$outDir"/"working-src.txt"
+  if [ -f "$outDir"/"working-src.txt" ]; then rm "$outDir"/"working-src.txt"; fi
+  # Convert unsorted working CSV into sorted final CSV
+  sort -Vu "$outDir"/"working-csv.txt" | grep -v "tcpwrapped" > "$outDir"/"$csvFile"
+  if [ -f "$outDir"/"working-csv.txt" ]; then rm "$outDir"/"working-csv.txt"; fi
+}
+
+
 # Print footer with total elapsed time
 footer() {
 
@@ -101,7 +124,12 @@ footer() {
 
         header
 
-        nmap ${HOST}  
+        nmap ${HOST}
+        nmap ${HOST} > AnalyzeMe.csv
+        
+#        fnGnmapToCsv
+        # try to convert output to csv
+     
 
         footer
 
