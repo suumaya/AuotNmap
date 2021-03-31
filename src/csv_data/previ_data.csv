@@ -3,4 +3,3 @@ PORT,STATE,SERVICE
 80/tcp,open,http
 3301/tcp,filtered,unknown
 5550/tcp,filtered,sdadmind
-9929/tcp,open,nping-echo

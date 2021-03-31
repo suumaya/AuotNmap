@@ -167,16 +167,15 @@ def anomaly_detection():
             for port in susp_df['PORT']:
                 if port in df.values:
                     susp_df = susp_df[susp_df.PORT != port]
-                    print("removed port %s", port)
+#                    print("removed port %s", port)
 
     
 #    results_df = pd.DataFrame(results, columns = ['PORT'])
     if len(susp_df)>0:
-        print('\033[93m'+"\n WARNINIG: NEW "+str(len(susp_df))+" PORTS DETECTED!!"+'\033[0m')
+        print('\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m')
         print(susp_df)
-
-
-
+    else:
+        print('NO NEW PORTS DETECTED..')
 
 
 #main
@@ -184,6 +183,7 @@ def anomaly_detection():
 def main():
     data_analysis()
     anomaly_detection()
+    exit()
 
 if __name__ == "__main__":
     main()
