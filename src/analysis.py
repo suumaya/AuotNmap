@@ -20,11 +20,15 @@ if len(sys.argv) != 3:
     sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
     exit()
 
-
 file_name = sys.argv[1]
-host = sys.argv[2]
+try:
+    df = pd.read_csv(file_name)
+except:
+    sys.stderr.write("No Open Ports".format(sys.argv[0]))
+    exit()
 
-df = pd.read_csv(file_name)
+
+host = sys.argv[2]
 base_color = sb.color_palette()[0]
 
 # services visuals
@@ -75,14 +79,15 @@ report_message10 = "3. Generate reports of the network status"
 pdf = FPDF()
 pdf.add_page()
 pdf.set_font('Arial','B',22);
-pdf.set_text_color(176,224,230)
+pdf.set_text_color(173,216,230)
 
 pdf.cell(200, 10, txt = report_message1,ln = 1, align = 'C')
 pdf.image(logo_img, w=pdf.w/2.0, h=pdf.h/4.0,x=50)
 pdf.cell(200, 10, txt = report_message6,ln = 4, align = 'C')
 
 pdf.set_font('Arial','B',16);
-pdf.set_text_color(0,76,153)
+
+pdf.set_text_color(176,196,222)
 pdf.ln(10)
 pdf.cell(200, 10, txt = report_message7,ln = 4, align = 'C')
 pdf.cell(200, 10, txt = report_message8,ln = 4, align = 'C')
