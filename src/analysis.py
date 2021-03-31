@@ -8,8 +8,8 @@ import seaborn as sb
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import docx
-#from docx2pdf import convert
+from matplotlib.ticker import MaxNLocator
+
 from fpdf import FPDF
 from datetime import datetime
 
@@ -21,11 +21,13 @@ if len(sys.argv) != 3:
     exit()
 
 file_name = sys.argv[1]
+
 try:
     df = pd.read_csv(file_name)
 except:
-    sys.stderr.write("No Open Ports".format(sys.argv[0]))
-    exit()
+    sys.stderr.write("You Don't Have Any Open Port! No Data to analyze...".format(sys.argv[0]))
+    sys.stderr.write("Thank you for using the service...")
+    sys.exit(2)
 
 
 host = sys.argv[2]
@@ -33,7 +35,9 @@ base_color = sb.color_palette()[0]
 
 # services visuals
 sb.set_style("darkgrid")
-ax1 = sb.countplot(x="SERVICE", data=df, palette="Set3")
+ax1 = plt.figure().gca()
+ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
+sb.countplot(x="SERVICE", data=df, palette="Set3",ax=ax1)
 ax1.figure.savefig("service-result.png")
 
 ## ports visuals

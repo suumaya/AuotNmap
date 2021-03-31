@@ -15,8 +15,7 @@ now=`date`
 # Start timer
 elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
 
-#HOST="45.33.32.156"
-HOST="192.100.0.1"
+HOST="45.33.32.156"
 TYPE='PORT'
 
 
@@ -42,8 +41,6 @@ portScan() {
     fi
     
       nmap $HOST | tail -n +5 |head -n -3 >> results"-${now}"
-
-
 
       while read line
       do
@@ -80,4 +77,7 @@ header
 portScan
 footer
 python3 analysis.py Data" On ${now}".csv $HOST
-evince final_report.pdf
+
+if [ -f "final_report.pdf" ]; then
+    evince final_report.pdf
+fi
