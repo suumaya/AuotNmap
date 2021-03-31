@@ -81,6 +81,7 @@ def data_analysis():
     report_message8 = "1. Collecting network data automatically"
     report_message9 = "2. Analyzing the collected network data"
     report_message10 = "3. Generate reports of the network status"
+    
 
 
     pdf = FPDF()
@@ -91,7 +92,8 @@ def data_analysis():
     pdf.cell(200, 10, txt = report_message1,ln = 1, align = 'C')
     pdf.image(logo_img, w=pdf.w/2.0, h=pdf.h/4.0,x=50)
     pdf.cell(200, 10, txt = report_message6,ln = 4, align = 'C')
-
+    pdf.cell(200, 10, txt = timenow,ln = 4, align = 'C')
+        
     pdf.set_font('Arial','B',16);
 
     pdf.set_text_color(176,196,222)
@@ -117,8 +119,7 @@ def data_analysis():
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
 
     report_name = "final_report_"+timenow+".pdf"
-    report_path = "./reports"
-    pdf.output("final_report.pdf",'F')
+    pdf.output("/home/kali/Desktop/src/reports/final_report.pdf",'F')
 
 
 
