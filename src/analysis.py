@@ -32,19 +32,18 @@ except:
 
 host = sys.argv[2]
 base_color = sb.color_palette()[0]
+sb.set_style("darkgrid")
 
 # services visuals
-sb.set_style("darkgrid")
-ax1 = plt.figure().gca()
-ax1.xaxis.set_major_locator(MaxNLocator(integer=True))
-sb.countplot(x="SERVICE", data=df, palette="Set3",ax=ax1)
+ax1 = sb.countplot(x="SERVICE", data=df, palette="Set3")
 ax1.figure.savefig("service-result.png")
+#ax1.xticks(rotation=15)
 
 ## ports visuals
 
 ax2 = sb.countplot(x="PORT", data=df, palette="Set3")
 ax2.figure.savefig("port-result.png")
-
+#plt.xticks(rotation=15)
 #port_counts = df['PORT'].value_counts()
 #plt.pie(port_counts, labels = port_counts.index, counterclock = False, startangle = 90, wedgeprops = {'width' : 0.4})
 #plt.axis('square');
