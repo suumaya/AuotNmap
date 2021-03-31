@@ -14,6 +14,8 @@ from matplotlib.ticker import MaxNLocator
 from fpdf import FPDF
 from datetime import datetime
 
+file_name = "csv_data/"+sys.argv[1]
+
 def data_analysis():
 
     now = datetime.now()
@@ -23,7 +25,6 @@ def data_analysis():
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
         exit()
 
-    file_name = sys.argv[1]
 
     try:
         df = pd.read_csv(file_name)
@@ -128,8 +129,10 @@ def anomaly_detection():
     myFolder = 'csv_data'
     files = []
     results = []
+    susp_list = []
+
 #new scan
-    current_file_name = sys.argv[1] #'csv_data/today_data.csv'
+    current_file_name = file_name
     current_file = pd.read_csv(current_file_name)
 
 #results of comparasion
@@ -148,12 +151,29 @@ def anomaly_detection():
             df = pd.read_csv(myfile)
             for port in current_file['PORT']:
                 if port not in df.values:
-                    results.append({'PORT': port})
+                    susp_list.append({'PORT': port})
 
-    results_df = pd.DataFrame(results, columns = ['PORT'])
-    if len(results_df)>0:
-        print('\033[93m'+"\n WARNINIG: NEW "+str(len(results_df))+" PORTS DETECTED!!"+'\033[0m')
-        print(results_df)
+
+    susp_df = pd.DataFrame(susp_list, columns = ['PORT'])
+
+
+    for file in glob.glob('csv_data/*.csv'):
+        if file == current_file_name:
+            continue;
+        files.append(file)
+
+        with open(os.path.join(os.getcwd(),file),mode='r') as myfile:
+            df = pd.read_csv(myfile)
+            for port in susp_df['PORT']:
+                if port in df.values:
+                    susp_df = susp_df[susp_df.PORT != port]
+                    print("removed port %s", port)
+
+    
+#    results_df = pd.DataFrame(results, columns = ['PORT'])
+    if len(susp_df)>0:
+        print('\033[93m'+"\n WARNINIG: NEW "+str(len(susp_df))+" PORTS DETECTED!!"+'\033[0m')
+        print(susp_df)
 
 
 
