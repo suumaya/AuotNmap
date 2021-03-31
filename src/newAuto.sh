@@ -57,6 +57,9 @@ rm temp
 fi
 
 cat results"-${now}" | tr -s '[:blank:]' ',' > Data" On ${now}".csv
+
+ Data" On ${now}".csv > cd csv_data/
+
 cat results"-${now}"
 rm results"-${now}"
 

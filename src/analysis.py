@@ -14,7 +14,7 @@ from matplotlib.ticker import MaxNLocator
 from fpdf import FPDF
 from datetime import datetime
 
-def data_analysis(){
+def data_analysis():
 
     now = datetime.now()
     timenow = now.strftime("%m/%d/%Y")
@@ -119,9 +119,9 @@ def data_analysis(){
     report_path = "./reports"
     pdf.output("final_report.pdf",'F')
 
-}
 
-def anomaly_detection(){
+
+def anomaly_detection():
 
 
     #change name of current to the one provided by shell/py?
@@ -129,7 +129,7 @@ def anomaly_detection(){
     files = []
     results = []
 #new scan
-    current_file_name = file_name #'csv_data/today_data.csv'
+    current_file_name = sys.argv[1] #'csv_data/today_data.csv'
     current_file = pd.read_csv(current_file_name)
 
 #results of comparasion
@@ -152,17 +152,16 @@ def anomaly_detection(){
 
     results_df = pd.DataFrame(results, columns = ['PORT'])
     if len(results_df)>0:
-        print("\nNEW "+str(len(results_df))+" PORTS DETECTED!!")
+        print('\033[93m'+"\n WARNINIG: NEW "+str(len(results_df))+" PORTS DETECTED!!"+'\033[0m')
         print(results_df)
 
 
-}
 
 
-// main
+
+#main
 
 def main():
-    print("Hello World!")
     data_analysis()
     anomaly_detection()
 
