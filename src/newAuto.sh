@@ -31,6 +31,8 @@ header() {
 # Port Nmap port scan
 portScan() {
         printf "${GREEN}---------------------Starting Port Scan-----------------------\n"
+        printf "${YELLOW}This may take 2 minutes....\n"
+
         printf "${NC}\n"
     
     if [ -e results"-${now}" ];
