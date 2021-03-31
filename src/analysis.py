@@ -13,11 +13,14 @@ import docx
 from fpdf import FPDF
 from datetime import datetime
 
+now = datetime.now()
+now = now.strftime("%m/%d/%Y, %H:%M:%S")
 
 if len(sys.argv) != 3:
     sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
     exit()
-now = datetime.now()
+
+
 file_name = sys.argv[1]
 host = sys.argv[2]
 
@@ -102,6 +105,7 @@ pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
 pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
 
 report_name = now+"final_report.pdf"
-pdf.output("./reports/"+report_name,'F')
+report_path = "./reports"
+pdf.output(name=report_name,'F')
 
 
