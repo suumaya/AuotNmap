@@ -65,9 +65,9 @@ def data_analysis():
 
 #Report generation
 
-    logo_img = "logo.png"
-    service_img = "service-result.png"
-    port_img = "port-result.png"
+    logo_img = "/home/kali/Desktop/src/photos/logo.png"
+    service_img = "/home/kali/Desktop/src/photos/service-result.png"
+    port_img = "/home/kali/Desktop/src/photos/port-result.png"
 
     report_message1 ="Results of analyzing IP: " + host +" computer"
     report_message2 = "You have the following services open:"
