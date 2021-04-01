@@ -79,6 +79,6 @@ portScan
 footer
 python3 analysis.py Data" On ${now}".csv $HOST
 
-if [ -f "final_report.pdf" ]; then
-    evince final_report.pdf
+if [ -f "./reports/final_report.pdf" ]; then
+    evince ./reports/final_report.pdf
 fi

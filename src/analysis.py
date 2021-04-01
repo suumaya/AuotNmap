@@ -19,7 +19,7 @@ file_name = "csv_data/"+sys.argv[1]
 def data_analysis():
 
     now = datetime.now()
-    timenow = now.strftime("%m/%d/%Y")
+    timenow = now.strftime("%d/%m/%Y")
 
     if len(sys.argv) != 3:
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
@@ -40,13 +40,13 @@ def data_analysis():
 
 # services visuals
     ax1 = sb.countplot(x="SERVICE", data=df, palette="Set3")
-    ax1.figure.savefig("service-result.png")
+    ax1.figure.savefig("/home/kali/Desktop/src/photos/service-result.png")
 #ax1.xticks(rotation=15)
 
 ## ports visuals
 
     ax2 = sb.countplot(x="PORT", data=df, palette="Set3")
-    ax2.figure.savefig("port-result.png")
+    ax2.figure.savefig("/home/kali/Desktop/src/photos/port-result.png")
 #plt.xticks(rotation=15)
 #port_counts = df['PORT'].value_counts()
 #plt.pie(port_counts, labels = port_counts.index, counterclock = False, startangle = 90, wedgeprops = {'width' : 0.4})
@@ -75,7 +75,7 @@ def data_analysis():
 
     report_message4 = "Thank You for using the service..."
     report_message5 = "Cyber security team."
-    report_message6 = "King Saud University - SEC 504 project"
+    report_message6 = "King Saud University - SEC 505 project"
 
     report_message7 = "Current features include:"
     report_message8 = "1. Collecting network data automatically"
@@ -152,7 +152,8 @@ def anomaly_detection():
             df = pd.read_csv(myfile)
             for port in current_file['PORT']:
                 if port not in df.values:
-                    susp_list.append({'PORT': port})
+                    if port not in susp_list:
+                        susp_list.append({'PORT': port})
 
 
     susp_df = pd.DataFrame(susp_list, columns = ['PORT'])
@@ -168,9 +169,9 @@ def anomaly_detection():
             for port in susp_df['PORT']:
                 if port in df.values:
                     susp_df = susp_df[susp_df.PORT != port]
-#                    print("removed port %s", port)
 
-    
+        
+    susp_df = susp_df.drop_duplicates()
 #    results_df = pd.DataFrame(results, columns = ['PORT'])
     if len(susp_df)>0:
         print('\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m')
