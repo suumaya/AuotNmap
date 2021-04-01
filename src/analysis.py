@@ -11,6 +11,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+from matplotlib.pyplot import step, show
+
 from fpdf import FPDF
 from datetime import datetime
 
@@ -20,7 +22,7 @@ def data_analysis():
 
     now = datetime.now()
     timenow = now.strftime("%d/%m/%Y")
-
+    common_tcp_ports = ["21","22","25","26","53","80","443","993","995","9929","9729"]
     if len(sys.argv) != 3:
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
         exit()
@@ -37,42 +39,45 @@ def data_analysis():
     host = sys.argv[2]
     base_color = sb.color_palette()[0]
     sb.set_style("darkgrid")
-
-# services visuals
-    ax1 = sb.countplot(x="SERVICE", data=df, palette="Set3")
-    ax1.figure.savefig("/home/kali/Desktop/src/photos/service-result.png")
-#ax1.xticks(rotation=15)
-
-## ports visuals
-
-    ax2 = sb.countplot(x="PORT", data=df, palette="Set3")
-    ax2.figure.savefig("/home/kali/Desktop/src/photos/port-result.png")
-#plt.xticks(rotation=15)
-#port_counts = df['PORT'].value_counts()
-#plt.pie(port_counts, labels = port_counts.index, counterclock = False, startangle = 90, wedgeprops = {'width' : 0.4})
-#plt.axis('square');
-#plt.xticks(rotation=15)
-##enhance
-#plt.legend(loc = 6, bbox_to_anchor = (1.0, 0.5)) # legend to right of figure
-#plt.xticks(rotation = 15)
-#plt.title('Total Ports open right now')
-#plt.xlabel('Port')
-#plt.ylabel('Number of ports');
-#plt.savefig("port-result.png")
+    df_of_open_ports = df.loc[lambda df: df['STATE'] == "open"]
+   
+   
+    # services visuals
+    ax = sb.countplot(x="SERVICE", data=df,palette="Set2")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
+    plt.tight_layout()
+    ax.yaxis.get_major_locator().set_params(integer=True)
+    ax.figure.savefig("/home/kali/Desktop/src/photos/service-result.png")
 
 
+    # ports visuals
+    ax = sb.countplot(x="PORT", data=df_of_open_ports,palette="Set2")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
+    plt.tight_layout()
+    ax.yaxis.get_major_locator().set_params(integer=True)
+    ax.figure.savefig("/home/kali/Desktop/src/photos/port-result.png")
 
+
+    # state visuals
+    ax = sb.countplot(x="STATE", data=df_of_open_ports,palette="Set2")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
+    plt.tight_layout()
+    ax.yaxis.get_major_locator().set_params(integer=True)
+    ax.figure.savefig("/home/kali/Desktop/src/photos/state-result.png")
+    
 
 #Report generation
 
+
+    #images
+    
     logo_img = "/home/kali/Desktop/src/photos/logo.png"
     service_img = "/home/kali/Desktop/src/photos/service-result.png"
     port_img = "/home/kali/Desktop/src/photos/port-result.png"
+    multi_img = "/home/kali/Desktop/src/photos/multi-result.png"
+    state_img = "/home/kali/Desktop/src/photos/state-result.png"
 
-    report_message1 ="Results of analyzing IP: " + host +" computer"
-    report_message2 = "You have the following services open:"
-    report_message3 = "You have the following ports open! try to close unnecessarily ports:"
-
+    #messages
     report_message4 = "Thank You for using the service..."
     report_message5 = "Cyber security team."
     report_message6 = "King Saud University - SEC 505 project"
@@ -81,10 +86,18 @@ def data_analysis():
     report_message8 = "1. Collecting network data automatically"
     report_message9 = "2. Analyzing the collected network data"
     report_message10 = "3. Generate reports of the network status"
+    new_feture1 = "4. Detect new discovered ports"
+    new_feture2 = "5. Display warning message of the new detected ports"
     
+    report_message1 ="Results of analyzing IP: " + host +" computer"
+    report_message2 = "You have the following services running:"
+    report_message3 = "You have some ports open! try to close unnecessarily ports:"
+    state_message = "The state of running ports is shown below:"
+
 
 
     pdf = FPDF()
+    #page1: Cover page
     pdf.add_page()
     pdf.set_font('Arial','B',22);
     pdf.set_text_color(173,216,230)
@@ -95,26 +108,35 @@ def data_analysis():
     pdf.cell(200, 10, txt = timenow,ln = 4, align = 'C')
         
     pdf.set_font('Arial','B',16);
-
     pdf.set_text_color(176,196,222)
-    pdf.ln(10)
+    pdf.ln(25)
     pdf.cell(200, 10, txt = report_message7,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message8,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message9,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message10,ln = 4, align = 'C')
+    pdf.cell(200, 10, txt = new_feture1,ln = 4, align = 'C')
+    pdf.cell(200, 10, txt = new_feture2,ln = 4, align = 'C')
 
 
+
+    #page2: graphs
     pdf.add_page()
     pdf.set_text_color(0,76,153)
+    
     pdf.cell(200, 10, txt = report_message2,ln = 2, align = 'C')
     pdf.image(service_img, w=pdf.w/2.0, h=pdf.h/4.0,x=50)
     pdf.ln(0.15)
-     
+    
+    pdf.cell(200, 10, txt = state_message,ln = 3, align = 'C')
+    pdf.image(state_img, w=pdf.w/2.0, h=pdf.h/4.0, x=50)
+    pdf.ln(0.15)
+   
     pdf.cell(200, 10, txt = report_message3,ln = 3, align = 'C')
-
     pdf.image(port_img, w=pdf.w/2.0, h=pdf.h/4.0, x=50)
-    pdf.ln(10)
+    pdf.ln(0.15)
 
+    #page 3: Conclude
+    pdf.add_page()
     pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
 
