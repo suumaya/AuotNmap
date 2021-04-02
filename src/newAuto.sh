@@ -15,7 +15,7 @@ now=`date`
 # Start timer
 elapsedStart="$(date '+%H:%M:%S' | awk -F: '{print $1 * 3600 + $2 * 60 + $3}')"
 
-HOST="45.33.32.156"
+HOST="192.168.100.16"
 TYPE='PORT'
 
 
