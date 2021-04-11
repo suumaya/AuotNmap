@@ -12,17 +12,19 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 from matplotlib.pyplot import step, show
-
 from fpdf import FPDF
 from datetime import datetime
 
-file_name = "csv_data/"+sys.argv[1]
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+file_name = dir_path+"/csv_data/"+sys.argv[1]
+host = sys.argv[2]
+base_color = sb.color_palette()[0]
 
 def data_analysis():
 
     now = datetime.now()
     timenow = now.strftime("%d/%m/%Y")
-    common_tcp_ports = ["21","22","25","26","53","80","443","993","995","9929","9729"]
     if len(sys.argv) != 3:
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
         exit()
@@ -36,8 +38,8 @@ def data_analysis():
         sys.exit(2)
 
 
-    host = sys.argv[2]
-    base_color = sb.color_palette()[0]
+   
+    
     sb.set_style("darkgrid")
     df_of_open_ports = df.loc[lambda df: df['STATE'] == "open"]
    
@@ -171,11 +173,15 @@ def anomaly_detection():
         files.append(file)
 
         with open(os.path.join(os.getcwd(),file),mode='r') as myfile:
-            df = pd.read_csv(myfile)
-            for port in current_file['PORT']:
-                if port not in df.values:
-                    if port not in susp_list:
-                        susp_list.append({'PORT': port})
+            try:
+                df = pd.read_csv(myfile)
+            except:
+                continue;
+                for port in current_file['PORT']:
+                    if port not in df.values:
+                        if port not in susp_list:
+                            susp_list.append({'PORT': port})
+            
 
 
     susp_df = pd.DataFrame(susp_list, columns = ['PORT'])
