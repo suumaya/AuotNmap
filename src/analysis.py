@@ -46,7 +46,7 @@ def data_analysis():
    
    
     # services visuals
-    ax = sb.countplot(x="SERVICE", data=df,palette="Set2")
+    ax = sb.countplot(x="SERVICE", data=df_of_open_ports,palette="Set2")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
     plt.tight_layout()
     ax.yaxis.get_major_locator().set_params(integer=True)
@@ -62,7 +62,7 @@ def data_analysis():
 
 
     # state visuals
-    ax = sb.countplot(x="STATE", data=df_of_open_ports,palette="Set2")
+    ax = sb.countplot(x="STATE", data=df,palette="Set2")
     ax.set_xticklabels(ax.get_xticklabels(), rotation=40, ha="right")
     plt.tight_layout()
     ax.yaxis.get_major_locator().set_params(integer=True)
