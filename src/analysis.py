@@ -14,6 +14,7 @@ from matplotlib.ticker import MaxNLocator
 from matplotlib.pyplot import step, show
 from fpdf import FPDF
 from datetime import datetime
+import six
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -215,16 +216,16 @@ def anomaly_detection():
     susp_df = susp_df.drop_duplicates()
     if len(susp_df)>0:
         warning_message = "\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"
-        fig,ax = render_mpl_table(susp_df, header_columns=0, col_width=2.0)
-        fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
+#        fig,ax = render_mpl_table2(susp_df, header_columns=0, col_width=0.25)
+#        fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
 
     else:
         warning_message = 'NO NEW PORTS DETECTED.. '
     
     return warning_message
+ 
 
-#dataframe to figure:
-def render_mpl_table(data, col_width=1.0, row_height=2, font_size=12,
+def render_mpl_table2(data, col_width=3.0, row_height=3, font_size=14,
                      header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
                      bbox=[0, 0, 1, 1], header_columns=0,
                      ax=None, **kwargs):
@@ -232,11 +233,13 @@ def render_mpl_table(data, col_width=1.0, row_height=2, font_size=12,
         size = (np.array(data.shape[::-1]) + np.array([0, 1])) * np.array([col_width, row_height])
         fig, ax = plt.subplots(figsize=size)
         ax.axis('off')
+
     mpl_table = ax.table(cellText=data.values, bbox=bbox, colLabels=data.columns, **kwargs)
+
     mpl_table.auto_set_font_size(False)
     mpl_table.set_fontsize(font_size)
 
-    for k, cell in mpl_table._cells.items():
+    for k, cell in six.iteritems(mpl_table._cells):
         cell.set_edgecolor(edge_color)
         if k[0] == 0 or k[1] < header_columns:
             cell.set_text_props(weight='bold', color='w')
@@ -244,6 +247,7 @@ def render_mpl_table(data, col_width=1.0, row_height=2, font_size=12,
         else:
             cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
     return ax.get_figure(), ax
+
 
 #main
 
