@@ -145,8 +145,10 @@ def reports():
     pdf.add_page()
     pdf.set_text_color(255,0,0)
     pdf.cell(200, 10, txt = warning_message,ln = 4, align = 'C')
-    pdf.image(susb_data_img, w=pdf.w/2.0, h=pdf.h/4.0, x=50)
-
+    try:
+        pdf.image(susb_data_img, w=pdf.w/2.0, h=pdf.h/4.0, x=50)
+    except:
+        pass
     pdf.set_text_color(0,76,153)
     pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
@@ -213,22 +215,18 @@ def anomaly_detection():
 
         
     susp_df = susp_df.drop_duplicates()
-#    results_df = pd.DataFrame(results, columns = ['PORT'])
     if len(susp_df)>0:
         warning_message = '\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m'
-#        print('\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m')
-#        print(susp_df)
+        fig,ax = render_mpl_table(susp_df, header_columns=0, col_width=2.0)
+        fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
+
     else:
         warning_message = 'NO NEW PORTS DETECTED..'
-#       print('NO NEW PORTS DETECTED..')
 
-    fig,ax = render_mpl_table(df, header_columns=0, col_width=2.0)
-    fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
 
     return warning_message
 
 #dataframe to figure:
-
 def render_mpl_table(data, col_width=3.0, row_height=0.625, font_size=14,
                      header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
                      bbox=[0, 0, 1, 1], header_columns=0,
@@ -249,11 +247,6 @@ def render_mpl_table(data, col_width=3.0, row_height=0.625, font_size=14,
         else:
             cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
     return ax.get_figure(), ax
-
-####
-
-
-
 
 #main
 
