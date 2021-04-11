@@ -159,6 +159,7 @@ def anomaly_detection():
 #new scan
     current_file_name = file_name
     current_file = pd.read_csv(current_file_name)
+        
 
 #results of comparasion
     results_file_name = 'results.csv'
@@ -193,10 +194,13 @@ def anomaly_detection():
         files.append(file)
 
         with open(os.path.join(os.getcwd(),file),mode='r') as myfile:
-            df = pd.read_csv(myfile)
-            for port in susp_df['PORT']:
-                if port in df.values:
-                    susp_df = susp_df[susp_df.PORT != port]
+            try:
+                df = pd.read_csv(myfile)
+            except:
+                continue;
+                for port in susp_df['PORT']:
+                    if port in df.values:
+                        susp_df = susp_df[susp_df.PORT != port]
 
         
     susp_df = susp_df.drop_duplicates()
