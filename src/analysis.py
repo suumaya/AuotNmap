@@ -168,7 +168,7 @@ def anomaly_detection():
     susp_list = []
 
 #new scan
-    current_file_name = file_name
+    current_file_name = "csv_data/"+sys.argv[1]
     current_file = pd.read_csv(current_file_name)
         
 
@@ -189,13 +189,11 @@ def anomaly_detection():
                 df = pd.read_csv(myfile)
             except:
                 continue;
-                for port in current_file['PORT']:
-                    if port not in df.values:
-                        if port not in susp_list:
-                            susp_list.append({'PORT': port})
+            for port in current_file['PORT']:
+                if port not in df.values:
+                    if port not in susp_list:
+                        susp_list.append({'PORT': port})
             
-
-
     susp_df = pd.DataFrame(susp_list, columns = ['PORT'])
 
 
@@ -209,25 +207,24 @@ def anomaly_detection():
                 df = pd.read_csv(myfile)
             except:
                 continue;
-                for port in susp_df['PORT']:
-                    if port in df.values:
-                        susp_df = susp_df[susp_df.PORT != port]
+            for port in susp_df['PORT']:
+                if port in df.values:
+                    susp_df = susp_df[susp_df.PORT != port]
 
         
     susp_df = susp_df.drop_duplicates()
     if len(susp_df)>0:
-        warning_message = '\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m'
+        warning_message = "\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"
         fig,ax = render_mpl_table(susp_df, header_columns=0, col_width=2.0)
         fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
 
     else:
-        warning_message = 'NO NEW PORTS DETECTED..'
-
-
+        warning_message = 'NO NEW PORTS DETECTED.. '
+    
     return warning_message
 
 #dataframe to figure:
-def render_mpl_table(data, col_width=3.0, row_height=0.625, font_size=14,
+def render_mpl_table(data, col_width=1.0, row_height=2, font_size=12,
                      header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
                      bbox=[0, 0, 1, 1], header_columns=0,
                      ax=None, **kwargs):
