@@ -20,11 +20,11 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 file_name = dir_path+"/csv_data/"+sys.argv[1]
 host = sys.argv[2]
 base_color = sb.color_palette()[0]
+warning_message = "initial"
 
 def data_analysis():
 
-    now = datetime.now()
-    timenow = now.strftime("%d/%m/%Y")
+   
     if len(sys.argv) != 3:
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
         exit()
@@ -69,8 +69,11 @@ def data_analysis():
     
 
 #Report generation
-
-
+def reports():
+    
+    warning_message = anomaly_detection()
+    now = datetime.now()
+    timenow = now.strftime("%d/%m/%Y")
     #images
     
     logo_img = "/home/kali/Desktop/src/photos/logo.png"
@@ -78,6 +81,7 @@ def data_analysis():
     port_img = "/home/kali/Desktop/src/photos/port-result.png"
     multi_img = "/home/kali/Desktop/src/photos/multi-result.png"
     state_img = "/home/kali/Desktop/src/photos/state-result.png"
+    susb_data_img = "/home/kali/Desktop/src/photos/susb_data.png"
 
     #messages
     report_message4 = "Thank You for using the service..."
@@ -139,12 +143,17 @@ def data_analysis():
 
     #page 3: Conclude
     pdf.add_page()
+    pdf.set_text_color(255,0,0)
+    pdf.cell(200, 10, txt = warning_message,ln = 4, align = 'C')
+    pdf.image(susb_data_img, w=pdf.w/2.0, h=pdf.h/4.0, x=50)
+
+    pdf.set_text_color(0,76,153)
     pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
+   
 
     report_name = "final_report_"+timenow+".pdf"
     pdf.output("/home/kali/Desktop/src/reports/final_report.pdf",'F')
-
 
 
 def anomaly_detection():
@@ -206,17 +215,52 @@ def anomaly_detection():
     susp_df = susp_df.drop_duplicates()
 #    results_df = pd.DataFrame(results, columns = ['PORT'])
     if len(susp_df)>0:
-        print('\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m')
-        print(susp_df)
+        warning_message = '\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m'
+#        print('\033[93m'+"\n WARNINIG: "+str(len(susp_df))+" NEW PORTS DETECTED!!"+'\033[0m')
+#        print(susp_df)
     else:
-        print('NO NEW PORTS DETECTED..')
+        warning_message = 'NO NEW PORTS DETECTED..'
+#       print('NO NEW PORTS DETECTED..')
+
+    fig,ax = render_mpl_table(df, header_columns=0, col_width=2.0)
+    fig.savefig("/home/kali/Desktop/src/photos/susb_data.png")
+
+    return warning_message
+
+#dataframe to figure:
+
+def render_mpl_table(data, col_width=3.0, row_height=0.625, font_size=14,
+                     header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
+                     bbox=[0, 0, 1, 1], header_columns=0,
+                     ax=None, **kwargs):
+    if ax is None:
+        size = (np.array(data.shape[::-1]) + np.array([0, 1])) * np.array([col_width, row_height])
+        fig, ax = plt.subplots(figsize=size)
+        ax.axis('off')
+    mpl_table = ax.table(cellText=data.values, bbox=bbox, colLabels=data.columns, **kwargs)
+    mpl_table.auto_set_font_size(False)
+    mpl_table.set_fontsize(font_size)
+
+    for k, cell in mpl_table._cells.items():
+        cell.set_edgecolor(edge_color)
+        if k[0] == 0 or k[1] < header_columns:
+            cell.set_text_props(weight='bold', color='w')
+            cell.set_facecolor(header_color)
+        else:
+            cell.set_facecolor(row_colors[k[0]%len(row_colors) ])
+    return ax.get_figure(), ax
+
+####
+
+
 
 
 #main
 
 def main():
     data_analysis()
-    anomaly_detection()
+    reports()
+#    anomaly_detection()
     exit()
 
 if __name__ == "__main__":
