@@ -164,9 +164,7 @@ def reports():
     pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
    
-    print("the passed time is:"+ passed_time)
     report_name = "/home/kali/Desktop/src/reports/final_report_"+passed_time+".pdf"  
-#    print("in python: final_report_"+passed_time+".pdf")
     pdf.output(report_name)
 
 

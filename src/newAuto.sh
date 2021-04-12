@@ -84,8 +84,8 @@ header
 portScan
 footer
 python3 analysis.py Data" On ${now}".csv $HOST $now
-printf "in shell:   final_report_${now}.pdf"
+
 if [ -f "./reports/final_report_${now}.pdf" ]; then
-    evince ./reports/final_report_${now}.pdf
+    evince "./reports/final_report_${now}.pdf"
 fi
  
