@@ -17,16 +17,25 @@ from datetime import datetime
 import six
 
 
+base_color = sb.color_palette()[0]
+warning_message = "initial"
 dir_path = os.path.dirname(os.path.realpath(__file__))
 file_name = dir_path+"/csv_data/"+sys.argv[1]
 host = sys.argv[2]
-base_color = sb.color_palette()[0]
-warning_message = "initial"
+
+#parse the date taken from shell script as a list
+passed_time_list = sys.argv[3:]
+passed_time = ""
+for i in range (len(passed_time_list)):
+    passed_time += passed_time_list[i]
+    if i!=6:
+        passed_time += ' '
+
 
 def data_analysis():
 
    
-    if len(sys.argv) != 3:
+    if len(sys.argv) <4 :
         sys.stderr.write("Usage:./newAuto.sh filename.csv\n".format(sys.argv[0]))
         exit()
 
@@ -75,6 +84,7 @@ def reports():
     warning_message = anomaly_detection()
     now = datetime.now()
     timenow = now.strftime("%d/%m/%Y")
+
     #images
     
     logo_img = "/home/kali/Desktop/src/photos/logo.png"
@@ -154,9 +164,10 @@ def reports():
     pdf.cell(200, 10, txt = report_message4,ln = 4, align = 'C')
     pdf.cell(200, 10, txt = report_message5,ln = 4, align = 'C')
    
-
-    report_name = "final_report_"+timenow+".pdf"
-    pdf.output("/home/kali/Desktop/src/reports/final_report.pdf",'F')
+    print("the passed time is:"+ passed_time)
+    report_name = "/home/kali/Desktop/src/reports/final_report_"+passed_time+".pdf"  
+#    print("in python: final_report_"+passed_time+".pdf")
+    pdf.output(report_name)
 
 
 def anomaly_detection():
